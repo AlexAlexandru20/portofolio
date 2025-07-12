@@ -22,7 +22,7 @@ def sendMailMyself(app, name, email, project_type, message):
 
     msg = Message(subject="New Contact Form Message",
                   body=body,
-                  recipients=['alexpopwebdev@gmail.com'])
+                  recipients=['dev@digitalcyber.digital'])
     
     try:
         Thread(target=sendMailAsync, args=(msg, app)).start()
@@ -69,7 +69,3 @@ def contact():
             print('Error: ', e)
             flash('Error. Please try again later', 'error')
     return render_template('contact.html')
-
-@main.route('/thanks')
-def thanks():
-    return render_template('thanks.html')
