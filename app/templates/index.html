@@ -1,0 +1,517 @@
+{% extends 'base.html' %} {% block title %}Home{% endblock %} {% block content
+%}
+<!-- Hero Banner with Three.js canvas -->
+<section class="text-center mb-12" data-aos="fade-up">
+  <div
+    id="hero-canvas-container"
+    class="mx-auto rounded-2xl shadow-lg"
+    style="height: 450px"
+  >
+    <canvas id="hero-canvas"></canvas>
+  </div>
+
+  <h2 class="text-5xl font-bold glow mt-8 mb-4">
+    Building the Future of the Web
+  </h2>
+  <p class="text-xl text-gray-300 mb-6">
+    Versatile fullstack developer with a strong focus on backend using modern
+    technologies.
+  </p>
+  <div class="flex flex-wrap justify-center gap-4">
+    <a
+      href="/contact"
+      class="bg-green-600 hover:bg-green-500 text-white py-2 px-6 rounded-xl text-lg transition duration-300"
+      >Hire Me</a
+    >
+    <a
+      href="/about"
+      class="bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-6 rounded-xl text-lg transition duration-300"
+      >About Me</a
+    >
+  </div>
+</section>
+
+<!-- Features Section -->
+<section
+  class="py-12 bg-gray-900 bg-opacity-50 rounded-xl shadow-lg mb-12"
+  data-aos="fade-up"
+>
+  <h3 class="text-3xl font-bold glow text-center mb-8">My Core Skills</h3>
+  <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
+    <div
+      class="bg-gray-800 p-6 rounded-lg hover:scale-105 transform transition duration-300"
+    >
+      <h4 class="text-xl font-semibold mb-2">Backend Development</h4>
+      <p class="text-gray-300">
+        Expertise in Node.js, Python, and PHP to build scalable server-side
+        applications.
+      </p>
+    </div>
+    <div
+      class="bg-gray-800 p-6 rounded-lg hover:scale-105 transform transition duration-300"
+    >
+      <h4 class="text-xl font-semibold mb-2">Frontend Design</h4>
+      <p class="text-gray-300">
+        Proficient in React, Vue, and Tailwind CSS for creating engaging UI
+        experiences.
+      </p>
+    </div>
+    <div
+      class="bg-gray-800 p-6 rounded-lg hover:scale-105 transform transition duration-300"
+    >
+      <h4 class="text-xl font-semibold mb-2">DevOps & Deployment</h4>
+      <p class="text-gray-300">
+        Experience with Docker, CI/CD pipelines, and cloud services like AWS and
+        Azure.
+      </p>
+    </div>
+  </div>
+</section>
+
+<!-- Projects Showcase -->
+<section class="py-12 mb-12" data-aos="fade-up">
+  <h3 class="text-3xl font-bold glow text-center mb-8">Recent Projects</h3>
+  <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
+    <!-- Project 1 -->
+    <div
+      class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transform transition duration-300"
+    >
+      <img
+        src="{{ url_for('static', filename='images/project1.png') }}"
+        alt="Project 1"
+        class="w-full h-48 object-cover"
+      />
+      <div class="p-4">
+        <h4 class="text-xl font-semibold mb-2">LPR Software</h4>
+        <p class="text-gray-300 mb-4">
+          A full-featured offline LPR built with React and Python.
+        </p>
+        <a
+          href="https://github.com/AlexAlexandru20/gateAutomation.git"
+          target="_blank"
+          class="text-cyan-500 hover:underline"
+          >View Details</a
+        >
+      </div>
+    </div>
+    <!-- Project 2 -->
+    <div
+      class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transform transition duration-300"
+    >
+      <img
+        src="{{ url_for('static', filename='images/project2.png') }}"
+        alt="Project 2"
+        class="w-full h-48 object-cover"
+      />
+      <div class="p-4">
+        <h4 class="text-xl font-semibold mb-2">Appointments Software</h4>
+        <p class="text-gray-300 mb-4">
+          A user-friendly website that streamlines scheduling and calendar
+          management
+        </p>
+        <a
+          href="https://github.com/AlexAlexandru20/appointment.git"
+          class="text-cyan-500 hover:underline"
+          >View Details</a
+        >
+      </div>
+    </div>
+    <!-- Project 3 -->
+    <div
+      class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transform transition duration-300"
+    >
+      <img
+        src="{{ url_for('static', filename='images/project3.png') }}"
+        alt="Project 3"
+        class="w-full h-48 object-cover"
+      />
+      <div class="p-4">
+        <h4 class="text-xl font-semibold mb-2">Splash Page</h4>
+        <p class="text-gray-300 mb-4">
+          A visually appealing web page designed to capture attention
+        </p>
+        <a
+          href="https://github.com/AlexAlexandru20/mozaic.github.io.git"
+          class="text-cyan-500 hover:underline"
+          >View Details</a
+        >
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonials Section -->
+<section
+  class="py-12 bg-gray-900 bg-opacity-50 rounded-xl shadow-lg mb-12"
+  data-aos="fade-up"
+>
+  <h3 class="text-3xl font-bold glow text-center mb-8">What Clients Say</h3>
+  <div
+    class="flex flex-col md:flex-row md:justify-center md:gap-8 max-w-6xl mx-auto px-4"
+  >
+    <!-- Testimonial 1 -->
+    <div
+      class="bg-gray-800 p-6 rounded-lg shadow hover:scale-105 transform transition duration-300 mb-6 md:mb-0"
+    >
+      <p class="italic mb-4">
+        "An exceptional developer! Delivered our project on time with great
+        quality."
+      </p>
+      <div class="flex items-center space-x-4">
+        <img
+          src="{{ url_for('static', filename='images/user.svg') }}"
+          alt="Client 1"
+          class="w-12 h-12 rounded-full object-cover"
+        />
+        <div>
+          <p class="font-semibold">Jane Doe</p>
+          <p class="text-gray-400 text-sm">CEO, TechCorp</p>
+        </div>
+      </div>
+    </div>
+    <!-- Testimonial 2 -->
+    <div
+      class="bg-gray-800 p-6 rounded-lg shadow hover:scale-105 transform transition duration-300"
+    >
+      <p class="italic mb-4">
+        "Highly skilled and professional. Would work again!"
+      </p>
+      <div class="flex items-center space-x-4">
+        <img
+          src="{{ url_for('static', filename='images/user.svg') }}"
+          alt="Client 2"
+          class="w-12 h-12 rounded-full object-cover"
+        />
+        <div>
+          <p class="font-semibold">John Smith</p>
+          <p class="text-gray-400 text-sm">Founder, StartupX</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Skills with Progress Bars -->
+<section class="py-12 mb-12" data-aos="fade-up" id="skills-section">
+  <h3 class="text-3xl font-bold glow text-center mb-8">My Skills</h3>
+  <div class="max-w-3xl mx-auto px-4 space-y-4">
+    <!-- JavaScript Skill -->
+    <div>
+      <p class="mb-1 font-semibold">JavaScript</p>
+      <div class="progress-container">
+        <div class="progress-bar" data-width="85"></div>
+      </div>
+    </div>
+    <!-- Python Skill -->
+    <div>
+      <p class="mb-1 font-semibold">Python</p>
+      <div class="progress-container">
+        <div class="progress-bar" data-width="95"></div>
+      </div>
+    </div>
+    <!-- React Skill -->
+    <div>
+      <p class="mb-1 font-semibold">React</p>
+      <div class="progress-container">
+        <div class="progress-bar" data-width="65"></div>
+      </div>
+    </div>
+    <!-- SQL Skill -->
+    <div>
+      <p class="mb-1 font-semibold">SQL</p>
+      <div class="progress-container">
+        <div class="progress-bar" data-width="70"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Call to Action Banner -->
+<section class="py-12 mb-12 text-center" data-aos="fade-up">
+  <div class="relative bg-gray-900 bg-opacity-50 rounded-xl shadow-lg max-w-6xl mx-auto px-4 py-20 overflow-hidden">
+    
+    <div class="absolute inset-0 z-0">
+      <img
+        src="{{ url_for('static', filename='images/call-to-action.jpg') }}"
+        alt="Call to Action Banner"
+        class="w-full h-full object-cover opacity-20 bg-motion"
+      />
+    </div>
+
+    <div class="relative z-10 flex flex-col items-center justify-center">
+      <h3 class="text-3xl font-bold glow text-white mb-4">
+        Ready to Build Something Amazing?
+      </h3>
+      <p class="text-xl text-gray-300 mb-6">
+        Let's collaborate to bring your ideas to life with cutting-edge web
+        solutions.
+      </p>
+      <a
+        href="/contact"
+        class="bg-green-600 hover:bg-green-500 text-white py-3 px-8 rounded-xl text-lg font-semibold transition duration-300"
+        >Hire Me Now</a
+      >
+    </div>
+
+  </div>
+</section>
+
+
+<!-- Footer -->
+<footer class="bg-black bg-opacity-80 mt-12 py-8">
+  <div
+    class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0"
+  >
+    <p class="text-gray-400">© 2025 Alx.dev. All rights reserved.</p>
+    <div class="flex space-x-4">
+      <a
+        href="https://www.linkedin.com/in/alexandru-popica-827902231?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app"
+        target="_blank"
+        class="hover:text-cyan-500 transition duration-300"
+        >LinkedIn</a
+      >
+      <a
+        href="https://github.com/AlexAlexandru20"
+        target="_blank"
+        class="hover:text-cyan-500 transition duration-300"
+        >GitHub</a
+      >
+    </div>
+  </div>
+</footer>
+{% endblock %} {% block scripts %}
+<script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.153.0/build/three.module.js"
+    }
+  }
+</script>
+
+<script type="module">
+  import * as THREE from "three";
+  import { EffectComposer } from "https://cdn.jsdelivr.net/npm/three@0.153.0/examples/jsm/postprocessing/EffectComposer.js";
+  import { RenderPass } from "https://cdn.jsdelivr.net/npm/three@0.153.0/examples/jsm/postprocessing/RenderPass.js";
+  import { UnrealBloomPass } from "https://cdn.jsdelivr.net/npm/three@0.153.0/examples/jsm/postprocessing/UnrealBloomPass.js";
+
+  (() => {
+    const container = document.getElementById("hero-canvas-container");
+    const canvas = document.getElementById("hero-canvas");
+    let width = container.clientWidth;
+    let height = container.clientHeight;
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      antialias: true,
+      alpha: false,
+    });
+    renderer.setSize(width, height);
+    renderer.setClearColor(0x000000, 1); // solid black
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+    camera.position.z = 7;
+
+    const group = new THREE.Group();
+    scene.add(group);
+
+    // Initial dummy color — will be overwritten dynamically
+    const baseColor = 0x0000cc;
+    const glowColor = 0x00cccc;
+
+    function createWireframeSphere(radius, segments, opacity = 0.85, scaleGlow = 1.15) {
+      const geometry = new THREE.SphereGeometry(radius, segments, segments);
+
+      const material = new THREE.MeshBasicMaterial({
+        color: baseColor,
+        wireframe: true,
+        transparent: true,
+        opacity: opacity,
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+
+      const glowMaterial = new THREE.MeshBasicMaterial({
+        color: glowColor,
+        wireframe: true,
+        transparent: true,
+        opacity: opacity * 0.35,
+        side: THREE.BackSide,
+      });
+      const glowMesh = new THREE.Mesh(geometry.clone(), glowMaterial);
+      glowMesh.scale.multiplyScalar(scaleGlow);
+
+      const group = new THREE.Group();
+      group.add(mesh);
+      group.add(glowMesh);
+      return group;
+    }
+
+    const sphere1 = createWireframeSphere(1.2, 64, 0.85, 1.25);
+    const sphere2 = createWireframeSphere(0.9, 64, 0.9, 1.2);
+    const sphere3 = createWireframeSphere(0.6, 64, 0.95, 1.15);
+
+    group.add(sphere1);
+    group.add(sphere2);
+    group.add(sphere3);
+
+    function createTorus(radius, tube, radialSegments, tubularSegments, opacity = 0.85) {
+      const geometry = new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments);
+      const material = new THREE.MeshBasicMaterial({
+        color: baseColor,
+        wireframe: true,
+        transparent: true,
+        opacity: opacity,
+      });
+      const mesh = new THREE.Mesh(geometry, material);
+
+      const glowMaterial = new THREE.MeshBasicMaterial({
+        color: glowColor,
+        wireframe: true,
+        transparent: true,
+        opacity: opacity * 0.35,
+        side: THREE.BackSide,
+      });
+      const glowMesh = new THREE.Mesh(geometry.clone(), glowMaterial);
+      glowMesh.scale.multiplyScalar(1.15);
+
+      const group = new THREE.Group();
+      group.add(mesh);
+      group.add(glowMesh);
+      return group;
+    }
+
+    const torus1 = createTorus(1.6, 0.05, 16, 100, 0.85);
+    const torus2 = createTorus(1.3, 0.03, 16, 100, 0.85);
+    const torus3 = createTorus(2.0, 0.02, 8, 100, 0.8);
+
+    group.add(torus1);
+    group.add(torus2);
+    group.add(torus3);
+
+    const particleCount = 150;
+    const particlesGeometry = new THREE.BufferGeometry();
+    const positions = [];
+    for (let i = 0; i < particleCount; i++) {
+      positions.push(
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10,
+        (Math.random() - 0.5) * 10
+      );
+    }
+    particlesGeometry.setAttribute(
+      "position",
+      new THREE.Float32BufferAttribute(positions, 3)
+    );
+
+    const particlesMaterial = new THREE.PointsMaterial({
+      color: glowColor,
+      size: 0.06,
+      transparent: true,
+      opacity: 0.3,
+    });
+
+    const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
+    scene.add(particleSystem);
+
+    // POSTPROCESSING SETUP
+    const composer = new EffectComposer(renderer);
+    composer.addPass(new RenderPass(scene, camera));
+
+    const bloomPass = new UnrealBloomPass(
+      new THREE.Vector2(width, height),
+      1.5, // strength
+      0.4, // radius
+      0.85 // threshold
+    );
+    composer.addPass(bloomPass);
+
+    let mouseX = 0;
+    let mouseY = 0;
+    const windowHalfX = width / 2;
+    const windowHalfY = height / 2;
+
+    container.addEventListener("mousemove", (event) => {
+      const rect = container.getBoundingClientRect();
+      mouseX = event.clientX - rect.left - windowHalfX;
+      mouseY = event.clientY - rect.top - windowHalfY;
+    });
+
+    const clock = new THREE.Clock();
+
+    // HSL → HEX helper
+    function hslToHex(h, s, l) {
+      const a = s * Math.min(l, 1 - l);
+      const f = (n) => {
+        const k = (n + h * 12) % 12;
+        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+        return Math.round(255 * color);
+      };
+      return (f(0) << 16) | (f(8) << 8) | f(4);
+    }
+
+    function animate() {
+      requestAnimationFrame(animate);
+
+      const elapsed = clock.getElapsedTime();
+
+      group.position.y = Math.sin(elapsed * 1.3) * 0.15;
+
+      const targetRotX = mouseY * 0.002;
+      const targetRotY = mouseX * 0.002;
+      group.rotation.x += 0.05 * (targetRotX - group.rotation.x);
+      group.rotation.y += 0.05 * (targetRotY - group.rotation.y);
+
+      sphere1.rotation.x += 0.005;
+      sphere1.rotation.y -= 0.007;
+      sphere2.rotation.x -= 0.008;
+      sphere2.rotation.y += 0.01;
+      sphere3.rotation.x += 0.009;
+      sphere3.rotation.y += 0.005;
+
+      torus1.rotation.x += 0.006;
+      torus1.rotation.z += 0.004;
+      torus2.rotation.y -= 0.007;
+      torus3.rotation.x -= 0.005;
+      torus3.rotation.z += 0.006;
+
+      particleSystem.rotation.y += 0.0008;
+      particleSystem.rotation.x += 0.0006;
+
+      const pulse = ((Math.sin(elapsed * 3) + 1) / 2) * 0.35 + 0.7;
+
+      // Dynamic color update
+      const hue = (elapsed * 0.05) % 1;
+      const dynamicColor = hslToHex(hue, 1.0, 0.5);
+      const dynamicGlow = hslToHex((hue + 0.1) % 1, 1.0, 0.7);
+
+      [sphere1, sphere2, sphere3, torus1, torus2, torus3].forEach((obj) => {
+        obj.children[0].material.color.setHex(dynamicColor); // base
+        obj.children[1].material.color.setHex(dynamicGlow);  // glow
+      });
+
+      particlesMaterial.color.setHex(dynamicGlow);
+
+      sphere1.children.forEach((mesh) => (mesh.material.opacity = pulse));
+      sphere2.children.forEach((mesh) => (mesh.material.opacity = pulse + 0.1));
+      sphere3.children.forEach((mesh) => (mesh.material.opacity = pulse + 0.2));
+      torus1.children.forEach((mesh) => (mesh.material.opacity = pulse));
+      torus2.children.forEach((mesh) => (mesh.material.opacity = pulse - 0.1));
+      torus3.children.forEach((mesh) => (mesh.material.opacity = pulse - 0.15));
+
+      composer.render();
+    }
+
+    animate();
+
+    window.addEventListener("resize", () => {
+      width = container.clientWidth;
+      height = container.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+      composer.setSize(width, height);
+    });
+  })();
+</script>
+{% endblock %}
+
