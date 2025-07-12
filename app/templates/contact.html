@@ -1,13 +1,11 @@
-{% extends 'base.html' %} {% block title %}Contact{% endblock %} {% block
-content %}
+{% extends 'base.html' %} {% block title %}Contact{% endblock %} {% block content %}
 <canvas
   id="starfield"
   class="fixed top-0 left-0 w-full h-full z-0 pointer-events-none"
 ></canvas>
 <!-- Hero Section -->
-<section class="py-12 text-center relative" data-aos="fade-up">
+<section class="py-20 text-center relative" data-aos="fade-up">
   <div class="max-w-6xl mx-auto px-4">
-    <!-- Background image -->
     <img
       src="{{ url_for('static', filename='images/contact-banner.jpg') }}"
       alt="Background Banner"
@@ -117,13 +115,13 @@ content %}
 </section>
 
 <!-- Contact Info Section -->
-<section class="py-12 mb-12" data-aos="fade-up">
+<section class="py-20 mb-12" data-aos="fade-up">
   <h3 class="text-3xl font-bold glow text-center mb-8">
     Other Ways to Reach Me
   </h3>
   <div class="max-w-4xl mx-auto px-4 grid md:grid-cols-3 gap-8">
     <div
-      class="bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
+      class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:scale-105 transform transition duration-300"
     >
       <div class="flex items-center space-x-4">
         <svg
@@ -145,13 +143,13 @@ content %}
           <a
             href="mailto:contact@digitalcyber.digital"
             class="text-cyan-500 hover:underline"
-            >digitalcyber.digital</a
+            >@digitalcyber.digital</a
           >
         </div>
       </div>
     </div>
     <div
-      class="bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
+      class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:scale-105 transform transition duration-300"
     >
       <div class="flex items-center space-x-4">
         <svg
@@ -180,7 +178,7 @@ content %}
       </div>
     </div>
     <div
-      class="bg-gray-800 p-6 rounded-lg shadow-lg hover:scale-105 transform transition duration-300"
+      class="bg-gray-800 p-6 rounded-2xl shadow-xl hover:scale-105 transform transition duration-300"
     >
       <div class="flex items-center space-x-4">
         <svg

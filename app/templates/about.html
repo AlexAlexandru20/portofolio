@@ -1,5 +1,4 @@
-{% extends 'base.html' %} {% block title %}About{% endblock %} {% block content
-%}
+{% extends 'base.html' %} {% block title %}About{% endblock %} {% block content %}
 <!-- Starfield Canvas Background -->
 <canvas
   id="starfield"
@@ -36,6 +35,12 @@
       create scalable, efficient systems. I thrive on solving complex problems
       and delivering seamless user experiences.
     </p>
+    <div class="flex flex-wrap justify-center md:justify-start gap-4">
+      <a
+        href="/contact"
+        class="bg-green-600 hover:bg-green-500 text-white py-3 px-6 rounded-xl font-medium transition duration-300"
+      >Let's Connect</a>
+    </div>
   </div>
 </section>
 
@@ -157,11 +162,9 @@
 </footer>
 {% endblock %} {% block scripts %}
 <script>
-  // Animate progress bars when section enters viewport
   function animateProgressBar(progressBar, targetWidth, duration) {
     let currentWidth = 0;
     const increment = targetWidth / (duration / 16);
-
     function updateWidth() {
       if (currentWidth < targetWidth) {
         currentWidth += increment;
@@ -176,23 +179,19 @@
 <script>
   document.addEventListener("DOMContentLoaded", () => {
     const section = document.querySelector("#about-skills-section");
+    if (!section) return;
     const progressBars = section.querySelectorAll(".progress-bar");
-
-    const observer = new IntersectionObserver(
-      (entries, observer) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            progressBars.forEach((bar) => {
-              const targetWidth = parseFloat(bar.getAttribute("data-width"));
-              animateProgressBar(bar, targetWidth, 1500);
-            });
-            observer.unobserve(section);
-          }
-        });
-      },
-      { threshold: 0.5 }
-    );
-
+    const observer = new IntersectionObserver((entries, observer) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          progressBars.forEach((bar) => {
+            const targetWidth = parseFloat(bar.getAttribute("data-width"));
+            animateProgressBar(bar, targetWidth, 1500);
+          });
+          observer.unobserve(section);
+        }
+      });
+    }, { threshold: 0.5 });
     observer.observe(section);
   });
 
@@ -222,7 +221,6 @@
   let movementY = 0;
   let useGyro = false;
 
-  // Mouse for desktop
   window.addEventListener("mousemove", (e) => {
     if (!useGyro) {
       movementX = e.clientX - window.innerWidth / 2;
@@ -230,14 +228,11 @@
     }
   });
 
-  // Gyroscope for mobile
   if (window.DeviceOrientationEvent) {
     window.addEventListener("deviceorientation", (event) => {
       if (event.alpha !== null && event.beta !== null && event.gamma !== null) {
         useGyro = true;
-        // gamma: left to right tilt [-90,90]
-        // beta: front to back tilt [-180,180]
-        movementX = event.gamma * 10; // increase multiplier if needed
+        movementX = event.gamma * 10;
         movementY = event.beta * 10;
       }
     });
@@ -253,18 +248,14 @@
     stars.forEach((star) => {
       let dx = movementX * 0.0005;
       let dy = movementY * 0.0005;
-
       star.x += dx * star.size;
       star.y += dy * star.size;
-
       star.x += Math.cos(star.angle) * star.drift;
       star.y += Math.sin(star.angle) * star.drift;
-
       if (star.x < 0) star.x = canvas.width;
       if (star.x > canvas.width) star.x = 0;
       if (star.y < 0) star.y = canvas.height;
       if (star.y > canvas.height) star.y = 0;
-
       ctx.beginPath();
       ctx.arc(star.x, star.y, star.size, 0, 2 * Math.PI);
       ctx.fillStyle = `rgba(255, 255, 255, ${0.2 + star.size / 2})`;
