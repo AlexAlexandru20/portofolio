@@ -425,16 +425,53 @@
     );
     composer.addPass(bloomPass);
 
-    let mouseX = 0;
-    let mouseY = 0;
+    // Variables for mouse movement rotation
+    let mouseX = 0, mouseY = 0;
+    let targetRotX = 0, targetRotY = 0;
     const windowHalfX = width / 2;
     const windowHalfY = height / 2;
 
-    container.addEventListener("mousemove", (event) => {
-      const rect = container.getBoundingClientRect();
-      mouseX = event.clientX - rect.left - windowHalfX;
-      mouseY = event.clientY - rect.top - windowHalfY;
-    });
+    // Variables for device orientation rotation
+    let deviceRotX = 0, deviceRotY = 0;
+    let deviceEnabled = false;
+
+    // Helper lerp function
+    function lerp(a, b, t) {
+      return a + (b - a) * t;
+    }
+
+    // Detect if mobile device (simple check)
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
+
+    // Mousemove handler (only if not mobile or large screen)
+    if (!isMobile || window.innerWidth >= 1024) {
+      container.addEventListener("mousemove", (event) => {
+        const rect = container.getBoundingClientRect();
+        mouseX = ((event.clientX - rect.left) - windowHalfX) / windowHalfX; // -1 to 1
+        mouseY = ((event.clientY - rect.top) - windowHalfY) / windowHalfY; // -1 to 1
+      });
+    }
+
+    // Device orientation handler (only if mobile)
+    if (isMobile) {
+      window.addEventListener('deviceorientation', (event) => {
+        // Use gamma (left-right tilt) and beta (front-back tilt)
+        // Adjust signs and range to fit expected rotation range
+        // Clamp to reasonable rotation angles (~ ±0.3 radians = ±17 degrees)
+        const maxAngle = 0.3;
+
+        // gamma ranges approx -90 to 90 degrees, normalize -1..1
+        let gamma = event.gamma ? THREE.MathUtils.clamp(event.gamma / 45, -1, 1) : 0;
+        // beta ranges approx -180 to 180 degrees, normalize -1..1
+        let beta = event.beta ? THREE.MathUtils.clamp(event.beta / 45, -1, 1) : 0;
+
+        // Map to rotation radians
+        deviceRotY = maxAngle * gamma; // left/right rotation (y axis)
+        deviceRotX = maxAngle * beta;  // up/down rotation (x axis)
+
+        deviceEnabled = true;
+      }, true);
+    }
 
     const clock = new THREE.Clock();
 
@@ -456,47 +493,59 @@
 
       group.position.y = Math.sin(elapsed * 1.3) * 0.15;
 
-      const targetRotX = mouseY * 0.002;
-      const targetRotY = mouseX * 0.002;
-      group.rotation.x += 0.05 * (targetRotX - group.rotation.x);
-      group.rotation.y += 0.05 * (targetRotY - group.rotation.y);
+      if (deviceEnabled && isMobile) {
+        // Smoothly interpolate group rotation to device orientation
+        group.rotation.x = lerp(group.rotation.x, deviceRotX, 0.1);
+        group.rotation.y = lerp(group.rotation.y, deviceRotY, 0.1);
+      } else {
+        // Mouse controls for desktop / large screens
+        targetRotX = mouseY * 0.3;
+        targetRotY = mouseX * 0.3;
+
+        group.rotation.x += 0.05 * (targetRotX - group.rotation.x);
+        group.rotation.y += 0.05 * (targetRotY - group.rotation.y);
+      }
 
       sphere1.rotation.x += 0.005;
       sphere1.rotation.y -= 0.007;
       sphere2.rotation.x -= 0.008;
       sphere2.rotation.y += 0.01;
-      sphere3.rotation.x += 0.009;
-      sphere3.rotation.y += 0.005;
+      sphere3.rotation.x += 0.004;
+      sphere3.rotation.y -= 0.006;
 
-      torus1.rotation.x += 0.006;
-      torus1.rotation.z += 0.004;
-      torus2.rotation.y -= 0.007;
-      torus3.rotation.x -= 0.005;
-      torus3.rotation.z += 0.006;
+      torus1.rotation.x += 0.005;
+      torus1.rotation.y -= 0.007;
+      torus2.rotation.x -= 0.008;
+      torus2.rotation.y += 0.01;
+      torus3.rotation.x += 0.004;
+      torus3.rotation.y -= 0.006;
 
-      particleSystem.rotation.y += 0.0008;
-      particleSystem.rotation.x += 0.0006;
+      // Animate particle system rotation and scale pulsation
+      particleSystem.rotation.x += 0.005;
+      particleSystem.rotation.y += 0.005;
+      particleSystem.scale.setScalar(1 + Math.sin(elapsed * 3) * 0.2);
 
-      const pulse = ((Math.sin(elapsed * 3) + 1) / 2) * 0.35 + 0.7;
+      // Update colors dynamically
+      const hue1 = (elapsed * 0.03) % 1;
+      const hue2 = (elapsed * 0.05) % 1;
 
-      // Dynamic color update
-      const hue = (elapsed * 0.05) % 1;
-      const dynamicColor = hslToHex(hue, 1.0, 0.5);
-      const dynamicGlow = hslToHex((hue + 0.1) % 1, 1.0, 0.7);
+      const baseCol = new THREE.Color();
+      baseCol.setHSL(hue1, 1, 0.5);
+      const glowCol = new THREE.Color();
+      glowCol.setHSL(hue2, 1, 0.5);
 
-      [sphere1, sphere2, sphere3, torus1, torus2, torus3].forEach((obj) => {
-        obj.children[0].material.color.setHex(dynamicColor); // base
-        obj.children[1].material.color.setHex(dynamicGlow);  // glow
+      // Update all materials of spheres and tori with new colors
+      [sphere1, sphere2, sphere3].forEach((grp) => {
+        grp.children[0].material.color.copy(baseCol);
+        grp.children[1].material.color.copy(glowCol);
+      });
+      [torus1, torus2, torus3].forEach((grp) => {
+        grp.children[0].material.color.copy(baseCol);
+        grp.children[1].material.color.copy(glowCol);
       });
 
-      particlesMaterial.color.setHex(dynamicGlow);
-
-      sphere1.children.forEach((mesh) => (mesh.material.opacity = pulse));
-      sphere2.children.forEach((mesh) => (mesh.material.opacity = pulse + 0.1));
-      sphere3.children.forEach((mesh) => (mesh.material.opacity = pulse + 0.2));
-      torus1.children.forEach((mesh) => (mesh.material.opacity = pulse));
-      torus2.children.forEach((mesh) => (mesh.material.opacity = pulse - 0.1));
-      torus3.children.forEach((mesh) => (mesh.material.opacity = pulse - 0.15));
+      // Update particle color
+      particlesMaterial.color.copy(glowCol);
 
       composer.render();
     }
@@ -506,12 +555,15 @@
     window.addEventListener("resize", () => {
       width = container.clientWidth;
       height = container.clientHeight;
+
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
+
       renderer.setSize(width, height);
       composer.setSize(width, height);
     });
   })();
 </script>
+
 {% endblock %}
 
