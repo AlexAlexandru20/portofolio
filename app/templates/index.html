@@ -310,18 +310,20 @@
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
-    camera.position.z = 7;
+
+    // Detect mobile or small screen
+    const isMobile = /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+    camera.position.z = isMobile ? 9 : 7;
 
     const group = new THREE.Group();
+    group.scale.setScalar(isMobile ? 0.6 : 1); // scale down on mobile
     scene.add(group);
 
-    // Initial dummy color — will be overwritten dynamically
     const baseColor = 0x0000cc;
     const glowColor = 0x00cccc;
 
     function createWireframeSphere(radius, segments, opacity = 0.85, scaleGlow = 1.15) {
       const geometry = new THREE.SphereGeometry(radius, segments, segments);
-
       const material = new THREE.MeshBasicMaterial({
         color: baseColor,
         wireframe: true,
@@ -350,9 +352,7 @@
     const sphere2 = createWireframeSphere(0.9, 64, 0.9, 1.2);
     const sphere3 = createWireframeSphere(0.6, 64, 0.95, 1.15);
 
-    group.add(sphere1);
-    group.add(sphere2);
-    group.add(sphere3);
+    group.add(sphere1, sphere2, sphere3);
 
     function createTorus(radius, tube, radialSegments, tubularSegments, opacity = 0.85) {
       const geometry = new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments);
@@ -384,9 +384,7 @@
     const torus2 = createTorus(1.3, 0.03, 16, 100, 0.85);
     const torus3 = createTorus(2.0, 0.02, 8, 100, 0.8);
 
-    group.add(torus1);
-    group.add(torus2);
-    group.add(torus3);
+    group.add(torus1, torus2, torus3);
 
     const particleCount = 150;
     const particlesGeometry = new THREE.BufferGeometry();
@@ -413,95 +411,63 @@
     const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particleSystem);
 
-    // POSTPROCESSING SETUP
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
 
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(width, height),
-      1.5, // strength
-      0.4, // radius
-      0.85 // threshold
+      1.5,
+      0.4,
+      0.85
     );
     composer.addPass(bloomPass);
 
-    // Variables for mouse movement rotation
     let mouseX = 0, mouseY = 0;
     let targetRotX = 0, targetRotY = 0;
     const windowHalfX = width / 2;
     const windowHalfY = height / 2;
 
-    // Variables for device orientation rotation
     let deviceRotX = 0, deviceRotY = 0;
     let deviceEnabled = false;
 
-    // Helper lerp function
     function lerp(a, b, t) {
       return a + (b - a) * t;
     }
 
-    // Detect if mobile device (simple check)
-    const isMobile = /Mobi|Android/i.test(navigator.userAgent);
-
-    // Mousemove handler (only if not mobile or large screen)
     if (!isMobile || window.innerWidth >= 1024) {
       container.addEventListener("mousemove", (event) => {
         const rect = container.getBoundingClientRect();
-        mouseX = ((event.clientX - rect.left) - windowHalfX) / windowHalfX; // -1 to 1
-        mouseY = ((event.clientY - rect.top) - windowHalfY) / windowHalfY; // -1 to 1
+        mouseX = ((event.clientX - rect.left) - windowHalfX) / windowHalfX;
+        mouseY = ((event.clientY - rect.top) - windowHalfY) / windowHalfY;
       });
     }
 
-    // Device orientation handler (only if mobile)
     if (isMobile) {
       window.addEventListener('deviceorientation', (event) => {
-        // Use gamma (left-right tilt) and beta (front-back tilt)
-        // Adjust signs and range to fit expected rotation range
-        // Clamp to reasonable rotation angles (~ ±0.3 radians = ±17 degrees)
         const maxAngle = 0.3;
-
-        // gamma ranges approx -90 to 90 degrees, normalize -1..1
         let gamma = event.gamma ? THREE.MathUtils.clamp(event.gamma / 45, -1, 1) : 0;
-        // beta ranges approx -180 to 180 degrees, normalize -1..1
         let beta = event.beta ? THREE.MathUtils.clamp(event.beta / 45, -1, 1) : 0;
 
-        // Map to rotation radians
-        deviceRotY = maxAngle * gamma; // left/right rotation (y axis)
-        deviceRotX = maxAngle * beta;  // up/down rotation (x axis)
-
+        deviceRotY = maxAngle * gamma;
+        deviceRotX = maxAngle * beta;
         deviceEnabled = true;
       }, true);
     }
 
     const clock = new THREE.Clock();
 
-    // HSL → HEX helper
-    function hslToHex(h, s, l) {
-      const a = s * Math.min(l, 1 - l);
-      const f = (n) => {
-        const k = (n + h * 12) % 12;
-        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-        return Math.round(255 * color);
-      };
-      return (f(0) << 16) | (f(8) << 8) | f(4);
-    }
-
     function animate() {
       requestAnimationFrame(animate);
-
       const elapsed = clock.getElapsedTime();
 
       group.position.y = Math.sin(elapsed * 1.3) * 0.15;
 
       if (deviceEnabled && isMobile) {
-        // Smoothly interpolate group rotation to device orientation
         group.rotation.x = lerp(group.rotation.x, deviceRotX, 0.1);
         group.rotation.y = lerp(group.rotation.y, deviceRotY, 0.1);
       } else {
-        // Mouse controls for desktop / large screens
         targetRotX = mouseY * 0.3;
         targetRotY = mouseX * 0.3;
-
         group.rotation.x += 0.05 * (targetRotX - group.rotation.x);
         group.rotation.y += 0.05 * (targetRotY - group.rotation.y);
       }
@@ -520,21 +486,16 @@
       torus3.rotation.x += 0.004;
       torus3.rotation.y -= 0.006;
 
-      // Animate particle system rotation and scale pulsation
       particleSystem.rotation.x += 0.005;
       particleSystem.rotation.y += 0.005;
       particleSystem.scale.setScalar(1 + Math.sin(elapsed * 3) * 0.2);
 
-      // Update colors dynamically
       const hue1 = (elapsed * 0.03) % 1;
       const hue2 = (elapsed * 0.05) % 1;
 
-      const baseCol = new THREE.Color();
-      baseCol.setHSL(hue1, 1, 0.5);
-      const glowCol = new THREE.Color();
-      glowCol.setHSL(hue2, 1, 0.5);
+      const baseCol = new THREE.Color().setHSL(hue1, 1, 0.5);
+      const glowCol = new THREE.Color().setHSL(hue2, 1, 0.5);
 
-      // Update all materials of spheres and tori with new colors
       [sphere1, sphere2, sphere3].forEach((grp) => {
         grp.children[0].material.color.copy(baseCol);
         grp.children[1].material.color.copy(glowCol);
@@ -544,7 +505,6 @@
         grp.children[1].material.color.copy(glowCol);
       });
 
-      // Update particle color
       particlesMaterial.color.copy(glowCol);
 
       composer.render();
@@ -558,12 +518,17 @@
 
       camera.aspect = width / height;
       camera.updateProjectionMatrix();
-
       renderer.setSize(width, height);
       composer.setSize(width, height);
+
+      // Resize adjustments
+      const isNowMobile = /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 768;
+      camera.position.z = isNowMobile ? 9 : 7;
+      group.scale.setScalar(isNowMobile ? 0.6 : 1);
     });
   })();
 </script>
+
 
 {% endblock %}
 
