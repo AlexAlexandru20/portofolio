@@ -58,6 +58,10 @@
       href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"
       rel="stylesheet"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/intl-tel-input@17.0.19/build/css/intlTelInput.min.css"
+    />
 
     <!-- Prefetch key assets for performance -->
     <link rel="preload" href="/static/images/logo.png" as="image" />
@@ -214,6 +218,47 @@
         animation: floatZoom 12s ease-in-out infinite;
         transition: transform 0.2s ease-out;
         will-change: transform;
+      }
+
+      /* Country dropdown dark theme override */
+      .iti__dropdown-content,
+      .iti__country-list {
+        background-color: #1f2937 !important; /* Tailwind's bg-gray-800 */
+        color: #f3f4f6 !important; /* Tailwind's text-gray-100 */
+        border: 1px solid #4b5563; /* Tailwind's border-gray-600 */
+      }
+
+      /* Highlighted country on hover/focus */
+      .iti__country:hover,
+      .iti__country.iti__highlight {
+        background-color: #374151 !important; /* Tailwind's bg-gray-700 */
+        color: #ffffff !important;
+      }
+
+      /* Dial code and country name */
+      .iti__country-name,
+      .iti__dial-code {
+        color: #f3f4f6 !important; /* text-gray-100 */
+      }
+
+      /* Search box inside dropdown (if any) */
+      .iti__search-input {
+        background-color: #374151 !important;
+        color: #f9fafb !important;
+        border: 1px solid #4b5563;
+      }
+
+      /* Ensure the input wrapper spans full width */
+      .iti {
+        width: 100% !important;
+      }
+
+      /* Ensure the inner input also stays full width */
+      .iti input {
+        width: 100% !important;
+        background-color: #1f2937; /* Tailwind's bg-gray-800 */
+        color: #f9fafb; /* Tailwind's text-white */
+        border-color: #4b5563; /* Tailwind's border-gray-600 */
       }
     </style>
   </head>
