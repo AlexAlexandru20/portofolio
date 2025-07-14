@@ -9,12 +9,13 @@ def sendMailAsync(msg, app):
     with app.app_context():
         mail.send(msg)
 
-def sendMailMyself(app, name, email, project_type, message):
+def sendMailMyself(app, name, phone, email, project_type, message):
     body = f"""
     New message from your portfolio contact form:
 
     Name: {name}
     Email: {email}
+    Phone: {phone}
     Project Type: {project_type}
     Message:
     {message}
@@ -22,7 +23,7 @@ def sendMailMyself(app, name, email, project_type, message):
 
     msg = Message(subject="New Contact Form Message",
                   body=body,
-                  recipients=['dev@digitalcyber.digital'])
+                  recipients=['dev@digitalcyber.digital', 'alexpopwebdev@gmail.com'])
     
     try:
         Thread(target=sendMailAsync, args=(msg, app)).start()
@@ -59,9 +60,10 @@ def contact():
         email = request.form.get('email')
         project_type = request.form.get('project-type')
         message = request.form.get('message')
+        phone = request.form.get('phone')
 
         try:
-            sendMailMyself(current_app._get_current_object(), name, email, project_type, message)
+            sendMailMyself(current_app._get_current_object(), name, email, phone, project_type, message)
             sendMailClient(current_app._get_current_object(), name, email)
             flash('Message was sent succesfully. We\'ll be in touch', 'success')
             return redirect(url_for('main.index'))
