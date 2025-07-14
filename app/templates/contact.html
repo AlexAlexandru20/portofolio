@@ -367,15 +367,22 @@ content %}
 
 <script>
   const input = document.querySelector("#phone");
+  const form = document.querySelector("form[action='/contact']");
 
   const iti = window.intlTelInput(input, {
-    initialCountry: "ro", // 🇷🇴 Default country is Romania
-    nationalMode: false,  // Show full international number like +40...
+    initialCountry: "ro",
+    nationalMode: false,
     formatOnDisplay: true,
-    separateDialCode: true, // You want the dial code inside the input
-    utilsScript: "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",
+    separateDialCode: true,
+    utilsScript:
+      "https://cdn.jsdelivr.net/npm/intl-tel-input@18.2.1/build/js/utils.js",
   });
 
+  form.addEventListener("submit", (e) => {
+    // Before submitting, overwrite the phone input value with the full international number
+    input.value = iti.getNumber(); // e.g. "+40721234567"
+  });
 </script>
+
 
 {% endblock %}
