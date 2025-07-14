@@ -9,7 +9,7 @@ def sendMailAsync(msg, app):
     with app.app_context():
         mail.send(msg)
 
-def sendMailMyself(app, name, phone, email, project_type, message):
+def sendMailMyself(app, name, email, phone, project_type, message):
     body = f"""
     New message from your portfolio contact form:
 
