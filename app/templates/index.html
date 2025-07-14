@@ -6,8 +6,10 @@
     id="hero-canvas-container"
     class="mx-auto rounded-2xl shadow-lg"
     style="height: 450px"
+    role="img"
+    aria-label="3D animated hero banner representing futuristic web development"
   >
-    <canvas id="hero-canvas"></canvas>
+    <canvas id="hero-canvas" aria-hidden="true"></canvas>
   </div>
 
   <h2 class="text-5xl font-bold glow mt-8 mb-4">
@@ -17,126 +19,160 @@
     Versatile fullstack developer with a strong focus on backend using modern
     technologies.
   </p>
-  <div class="flex flex-wrap justify-center gap-4">
-    <a
-      href="/contact"
-      class="bg-green-600 hover:bg-green-500 text-white py-2 px-6 rounded-xl text-lg transition duration-300"
-      >Hire Me</a
-    >
-    <a
-      href="/about"
-      class="bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-6 rounded-xl text-lg transition duration-300"
-      >About Me</a
-    >
-  </div>
+  <nav aria-label="Primary actions">
+    <div class="flex flex-wrap justify-center gap-4">
+      <a
+        href="/contact"
+        class="bg-green-600 hover:bg-green-500 text-white py-2 px-6 rounded-xl text-lg transition duration-300"
+        title="Hire Digital Cyber"
+        >Hire Me</a
+      >
+      <a
+        href="/about"
+        class="bg-cyan-700 hover:bg-cyan-600 text-white py-2 px-6 rounded-xl text-lg transition duration-300"
+        title="About Digital Cyber"
+        >About Me</a
+      >
+    </div>
+  </nav>
 </section>
 
 <!-- Features Section -->
 <section
   class="py-12 bg-gray-900 bg-opacity-50 rounded-xl shadow-lg mb-12"
   data-aos="fade-up"
+  aria-labelledby="skills-heading"
 >
-  <h3 class="text-3xl font-bold glow text-center mb-8">My Core Skills</h3>
+  <h2 id="skills-heading" class="text-3xl font-bold glow text-center mb-8">
+    My Core Skills
+  </h2>
   <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
-    <div
+    <article
       class="bg-gray-800 p-6 rounded-lg hover:scale-105 transform transition duration-300"
+      aria-label="Backend Development skills"
     >
-      <h4 class="text-xl font-semibold mb-2">Backend Development</h4>
+      <h3 class="text-xl font-semibold mb-2">Backend Development</h3>
       <p class="text-gray-300">
-        Expertise in Node.js, Python, and PHP to build scalable server-side
-        applications.
+        Expertise in Python and PHP to build scalable server-side applications.
       </p>
-    </div>
-    <div
+    </article>
+    <article
       class="bg-gray-800 p-6 rounded-lg hover:scale-105 transform transition duration-300"
+      aria-label="Frontend Design skills"
     >
-      <h4 class="text-xl font-semibold mb-2">Frontend Design</h4>
+      <h3 class="text-xl font-semibold mb-2">Frontend Design</h3>
       <p class="text-gray-300">
-        Proficient in React, Vue, and Tailwind CSS for creating engaging UI
+        Proficient in React and Tailwind CSS for creating engaging UI
         experiences.
       </p>
-    </div>
-    <div
+    </article>
+    <article
       class="bg-gray-800 p-6 rounded-lg hover:scale-105 transform transition duration-300"
+      aria-label="DevOps and Deployment skills"
     >
-      <h4 class="text-xl font-semibold mb-2">DevOps & Deployment</h4>
+      <h3 class="text-xl font-semibold mb-2">DevOps & Deployment</h3>
       <p class="text-gray-300">
         Experience with Docker, CI/CD pipelines, and cloud services like AWS and
         Azure.
       </p>
-    </div>
+    </article>
   </div>
 </section>
 
 <!-- Projects Showcase -->
-<section class="py-12 mb-12" data-aos="fade-up">
-  <h3 class="text-3xl font-bold glow text-center mb-8">Recent Projects</h3>
+<section
+  class="py-12 mb-12"
+  data-aos="fade-up"
+  aria-labelledby="projects-heading"
+>
+  <h2 id="projects-heading" class="text-3xl font-bold glow text-center mb-8">
+    Recent Projects
+  </h2>
   <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto px-4">
     <!-- Project 1 -->
-    <div
+    <article
       class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transform transition duration-300"
+      aria-label="Project LPR Software"
     >
       <img
         src="{{ url_for('static', filename='images/project1.png') }}"
-        alt="Project 1"
+        alt="Screenshot of LPR Software project interface"
         class="w-full h-48 object-cover"
+        loading="lazy"
+        decoding="async"
       />
       <div class="p-4">
-        <h4 class="text-xl font-semibold mb-2">LPR Software</h4>
+        <h3 class="text-xl font-semibold mb-2">LPR Software</h3>
         <p class="text-gray-300 mb-4">
-          A full-featured offline LPR built with React and Python.
+          A full-featured offline License Plate Recognition system built with
+          Python.
         </p>
         <a
           href="https://github.com/AlexAlexandru20/gateAutomation.git"
           target="_blank"
+          rel="noopener noreferrer"
           class="text-cyan-500 hover:underline"
+          aria-label="View details about LPR Software project on GitHub"
           >View Details</a
         >
       </div>
-    </div>
+    </article>
     <!-- Project 2 -->
-    <div
+    <article
       class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transform transition duration-300"
+      aria-label="Project Appointments Software"
     >
       <img
         src="{{ url_for('static', filename='images/project2.png') }}"
-        alt="Project 2"
+        alt="Screenshot of Appointments Software project interface"
         class="w-full h-48 object-cover"
+        loading="lazy"
+        decoding="async"
       />
       <div class="p-4">
-        <h4 class="text-xl font-semibold mb-2">Appointments Software</h4>
+        <h3 class="text-xl font-semibold mb-2">Appointments Software</h3>
         <p class="text-gray-300 mb-4">
           A user-friendly website that streamlines scheduling and calendar
-          management
+          management.
         </p>
         <a
           href="https://github.com/AlexAlexandru20/appointment.git"
+          target="_blank"
+          rel="noopener noreferrer"
           class="text-cyan-500 hover:underline"
+          aria-label="View details about Appointments Software project on GitHub"
           >View Details</a
         >
       </div>
-    </div>
+    </article>
     <!-- Project 3 -->
-    <div
+    <article
       class="bg-gray-800 rounded-lg overflow-hidden shadow-lg hover:scale-105 transform transition duration-300"
+      aria-label="Project Splash Page"
     >
       <img
         src="{{ url_for('static', filename='images/project3.png') }}"
-        alt="Project 3"
+        alt="Screenshot of Splash Page project interface"
         class="w-full h-48 object-cover"
+        loading="lazy"
+        decoding="async"
       />
       <div class="p-4">
-        <h4 class="text-xl font-semibold mb-2">Splash Page</h4>
+        <h3 class="text-xl font-semibold mb-2">Splash Page</h3>
         <p class="text-gray-300 mb-4">
-          A visually appealing web page designed to capture attention
+          A landing page featuring a glowing black theme and animated elements
+          using Three.js.
         </p>
         <a
-          href="https://github.com/AlexAlexandru20/mozaic.github.io.git"
+          href="https://github.com/AlexAlexandru20/splashpage.git"
+          target="_blank"
+          rel="noopener noreferrer"
           class="text-cyan-500 hover:underline"
+          aria-label="View details about Splash Page project on GitHub"
           >View Details</a
         >
       </div>
-    </div>
+    </article>
   </div>
 </section>
 
@@ -228,8 +264,9 @@
 
 <!-- Call to Action Banner -->
 <section class="py-12 mb-12 text-center" data-aos="fade-up">
-  <div class="relative bg-gray-900 bg-opacity-50 rounded-xl shadow-lg max-w-6xl mx-auto px-4 py-20 overflow-hidden">
-    
+  <div
+    class="relative bg-gray-900 bg-opacity-50 rounded-xl shadow-lg max-w-6xl mx-auto px-4 py-20 overflow-hidden"
+  >
     <div class="absolute inset-0 z-0">
       <img
         src="{{ url_for('static', filename='images/call-to-action.jpg') }}"
@@ -252,10 +289,8 @@
         >Hire Me Now</a
       >
     </div>
-
   </div>
 </section>
-
 
 <!-- Footer -->
 <footer class="bg-black bg-opacity-80 mt-12 py-8">
@@ -319,7 +354,12 @@
     const baseColor = 0x0000cc;
     const glowColor = 0x00cccc;
 
-    function createWireframeSphere(radius, segments, opacity = 0.85, scaleGlow = 1.15) {
+    function createWireframeSphere(
+      radius,
+      segments,
+      opacity = 0.85,
+      scaleGlow = 1.15
+    ) {
       const geometry = new THREE.SphereGeometry(radius, segments, segments);
 
       const material = new THREE.MeshBasicMaterial({
@@ -354,8 +394,19 @@
     group.add(sphere2);
     group.add(sphere3);
 
-    function createTorus(radius, tube, radialSegments, tubularSegments, opacity = 0.85) {
-      const geometry = new THREE.TorusGeometry(radius, tube, radialSegments, tubularSegments);
+    function createTorus(
+      radius,
+      tube,
+      radialSegments,
+      tubularSegments,
+      opacity = 0.85
+    ) {
+      const geometry = new THREE.TorusGeometry(
+        radius,
+        tube,
+        radialSegments,
+        tubularSegments
+      );
       const material = new THREE.MeshBasicMaterial({
         color: baseColor,
         wireframe: true,
@@ -410,7 +461,10 @@
       opacity: 0.3,
     });
 
-    const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
+    const particleSystem = new THREE.Points(
+      particlesGeometry,
+      particlesMaterial
+    );
     scene.add(particleSystem);
 
     // POSTPROCESSING SETUP
@@ -426,13 +480,16 @@
     composer.addPass(bloomPass);
 
     // Variables for mouse movement rotation
-    let mouseX = 0, mouseY = 0;
-    let targetRotX = 0, targetRotY = 0;
+    let mouseX = 0,
+      mouseY = 0;
+    let targetRotX = 0,
+      targetRotY = 0;
     const windowHalfX = width / 2;
     const windowHalfY = height / 2;
 
     // Variables for device orientation rotation
-    let deviceRotX = 0, deviceRotY = 0;
+    let deviceRotX = 0,
+      deviceRotY = 0;
     let deviceEnabled = false;
 
     // Helper lerp function
@@ -447,30 +504,38 @@
     if (!isMobile || window.innerWidth >= 1024) {
       container.addEventListener("mousemove", (event) => {
         const rect = container.getBoundingClientRect();
-        mouseX = ((event.clientX - rect.left) - windowHalfX) / windowHalfX; // -1 to 1
-        mouseY = ((event.clientY - rect.top) - windowHalfY) / windowHalfY; // -1 to 1
+        mouseX = (event.clientX - rect.left - windowHalfX) / windowHalfX; // -1 to 1
+        mouseY = (event.clientY - rect.top - windowHalfY) / windowHalfY; // -1 to 1
       });
     }
 
     // Device orientation handler (only if mobile)
     if (isMobile) {
-      window.addEventListener('deviceorientation', (event) => {
-        // Use gamma (left-right tilt) and beta (front-back tilt)
-        // Adjust signs and range to fit expected rotation range
-        // Clamp to reasonable rotation angles (~ ±0.3 radians = ±17 degrees)
-        const maxAngle = 0.3;
+      window.addEventListener(
+        "deviceorientation",
+        (event) => {
+          // Use gamma (left-right tilt) and beta (front-back tilt)
+          // Adjust signs and range to fit expected rotation range
+          // Clamp to reasonable rotation angles (~ ±0.3 radians = ±17 degrees)
+          const maxAngle = 0.3;
 
-        // gamma ranges approx -90 to 90 degrees, normalize -1..1
-        let gamma = event.gamma ? THREE.MathUtils.clamp(event.gamma / 45, -1, 1) : 0;
-        // beta ranges approx -180 to 180 degrees, normalize -1..1
-        let beta = event.beta ? THREE.MathUtils.clamp(event.beta / 45, -1, 1) : 0;
+          // gamma ranges approx -90 to 90 degrees, normalize -1..1
+          let gamma = event.gamma
+            ? THREE.MathUtils.clamp(event.gamma / 45, -1, 1)
+            : 0;
+          // beta ranges approx -180 to 180 degrees, normalize -1..1
+          let beta = event.beta
+            ? THREE.MathUtils.clamp(event.beta / 45, -1, 1)
+            : 0;
 
-        // Map to rotation radians
-        deviceRotY = maxAngle * gamma; // left/right rotation (y axis)
-        deviceRotX = maxAngle * beta;  // up/down rotation (x axis)
+          // Map to rotation radians
+          deviceRotY = maxAngle * gamma; // left/right rotation (y axis)
+          deviceRotX = maxAngle * beta; // up/down rotation (x axis)
 
-        deviceEnabled = true;
-      }, true);
+          deviceEnabled = true;
+        },
+        true
+      );
     }
 
     const clock = new THREE.Clock();
@@ -566,4 +631,3 @@
 </script>
 
 {% endblock %}
-
