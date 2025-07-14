@@ -341,7 +341,7 @@
       alpha: false,
     });
     renderer.setSize(width, height);
-    renderer.setClearColor(0x000000, 1); // solid black
+    renderer.setClearColor(0x000000, 1);
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
@@ -350,95 +350,82 @@
     const group = new THREE.Group();
     scene.add(group);
 
-    // Initial dummy color — will be overwritten dynamically
+    // Base colors for dynamic cycling
     const baseColor = 0x0000cc;
     const glowColor = 0x00cccc;
 
-    function createWireframeSphere(
-      radius,
-      segments,
-      opacity = 0.85,
-      scaleGlow = 1.15
-    ) {
+    // Create layered glowing sphere group
+    function createGlowingSphere(radius, segments, wireOpacity = 0.9, solidOpacity = 0.25, scaleGlow = 1.3) {
       const geometry = new THREE.SphereGeometry(radius, segments, segments);
 
-      const material = new THREE.MeshBasicMaterial({
+      const wireMaterial = new THREE.MeshBasicMaterial({
         color: baseColor,
         wireframe: true,
         transparent: true,
-        opacity: opacity,
+        opacity: wireOpacity,
       });
-      const mesh = new THREE.Mesh(geometry, material);
+      const wireMesh = new THREE.Mesh(geometry, wireMaterial);
+
+      const solidMaterial = new THREE.MeshPhongMaterial({
+        color: baseColor,
+        transparent: true,
+        opacity: solidOpacity,
+        shininess: 60,
+        emissive: new THREE.Color(glowColor),
+        emissiveIntensity: 0.4,
+      });
+      const solidMesh = new THREE.Mesh(geometry.clone(), solidMaterial);
 
       const glowMaterial = new THREE.MeshBasicMaterial({
         color: glowColor,
         wireframe: true,
         transparent: true,
-        opacity: opacity * 0.35,
+        opacity: wireOpacity * 0.35,
         side: THREE.BackSide,
       });
       const glowMesh = new THREE.Mesh(geometry.clone(), glowMaterial);
       glowMesh.scale.multiplyScalar(scaleGlow);
 
-      const group = new THREE.Group();
-      group.add(mesh);
-      group.add(glowMesh);
-      return group;
+      const grp = new THREE.Group();
+      grp.add(solidMesh);
+      grp.add(wireMesh);
+      grp.add(glowMesh);
+      return grp;
     }
 
-    const sphere1 = createWireframeSphere(1.2, 64, 0.85, 1.25);
-    const sphere2 = createWireframeSphere(0.9, 64, 0.9, 1.2);
-    const sphere3 = createWireframeSphere(0.6, 64, 0.95, 1.15);
+    // Create spheres
+    const sphere1 = createGlowingSphere(1.2, 64, 0.9, 0.25, 1.35);
+    const sphere2 = createGlowingSphere(0.9, 64, 0.9, 0.18, 1.25);
+    const sphere3 = createGlowingSphere(0.6, 64, 0.9, 0.12, 1.15);
 
     group.add(sphere1);
     group.add(sphere2);
     group.add(sphere3);
 
-    function createTorus(
-      radius,
-      tube,
-      radialSegments,
-      tubularSegments,
-      opacity = 0.85
-    ) {
-      const geometry = new THREE.TorusGeometry(
-        radius,
-        tube,
-        radialSegments,
-        tubularSegments
-      );
-      const material = new THREE.MeshBasicMaterial({
-        color: baseColor,
-        wireframe: true,
-        transparent: true,
-        opacity: opacity,
-      });
-      const mesh = new THREE.Mesh(geometry, material);
+    // Create tori group
+    const toriGroup = new THREE.Group();
 
-      const glowMaterial = new THREE.MeshBasicMaterial({
+    const torusCount = 3;
+    for (let i = 0; i < torusCount; i++) {
+      const torusGeometry = new THREE.TorusGeometry(2.3 - i * 0.4, 0.06, 10, 60);
+      const torusMaterial = new THREE.MeshBasicMaterial({
         color: glowColor,
-        wireframe: true,
         transparent: true,
-        opacity: opacity * 0.35,
-        side: THREE.BackSide,
+        opacity: 0.35,
+        wireframe: true,
       });
-      const glowMesh = new THREE.Mesh(geometry.clone(), glowMaterial);
-      glowMesh.scale.multiplyScalar(1.15);
+      const torus = new THREE.Mesh(torusGeometry, torusMaterial);
 
-      const group = new THREE.Group();
-      group.add(mesh);
-      group.add(glowMesh);
-      return group;
+      // Rotate tori differently so they’re not aligned
+      torus.rotation.x = (Math.PI / 4) * i;
+      torus.rotation.y = (Math.PI / 3) * i;
+
+      toriGroup.add(torus);
     }
 
-    const torus1 = createTorus(1.6, 0.05, 16, 100, 0.85);
-    const torus2 = createTorus(1.3, 0.03, 16, 100, 0.85);
-    const torus3 = createTorus(2.0, 0.02, 8, 100, 0.8);
+    group.add(toriGroup);
 
-    group.add(torus1);
-    group.add(torus2);
-    group.add(torus3);
-
+    // Particle system with orbiting movement
     const particleCount = 150;
     const particlesGeometry = new THREE.BufferGeometry();
     const positions = [];
@@ -467,19 +454,26 @@
     );
     scene.add(particleSystem);
 
-    // POSTPROCESSING SETUP
+    // Lighting for solid layers
+    const ambientLight = new THREE.AmbientLight(0x404040, 0.8);
+    scene.add(ambientLight);
+
+    const directionalLight = new THREE.DirectionalLight(0x00ffff, 0.7);
+    directionalLight.position.set(5, 5, 5);
+    scene.add(directionalLight);
+
+    // Postprocessing
     const composer = new EffectComposer(renderer);
     composer.addPass(new RenderPass(scene, camera));
-
     const bloomPass = new UnrealBloomPass(
       new THREE.Vector2(width, height),
-      1.5, // strength
-      0.4, // radius
-      0.85 // threshold
+      2.0,
+      0.4,
+      0.85
     );
     composer.addPass(bloomPass);
 
-    // Variables for mouse movement rotation
+    // Mouse & device rotation
     let mouseX = 0,
       mouseY = 0;
     let targetRotX = 0,
@@ -487,50 +481,38 @@
     const windowHalfX = width / 2;
     const windowHalfY = height / 2;
 
-    // Variables for device orientation rotation
     let deviceRotX = 0,
       deviceRotY = 0;
     let deviceEnabled = false;
 
-    // Helper lerp function
     function lerp(a, b, t) {
       return a + (b - a) * t;
     }
 
-    // Detect if mobile device (simple check)
     const isMobile = /Mobi|Android/i.test(navigator.userAgent);
 
-    // Mousemove handler (only if not mobile or large screen)
     if (!isMobile || window.innerWidth >= 1024) {
       container.addEventListener("mousemove", (event) => {
         const rect = container.getBoundingClientRect();
-        mouseX = (event.clientX - rect.left - windowHalfX) / windowHalfX; // -1 to 1
-        mouseY = (event.clientY - rect.top - windowHalfY) / windowHalfY; // -1 to 1
+        mouseX = (event.clientX - rect.left - windowHalfX) / windowHalfX;
+        mouseY = (event.clientY - rect.top - windowHalfY) / windowHalfY;
       });
     }
 
-    // Device orientation handler (only if mobile)
     if (isMobile) {
       window.addEventListener(
         "deviceorientation",
         (event) => {
-          // Use gamma (left-right tilt) and beta (front-back tilt)
-          // Adjust signs and range to fit expected rotation range
-          // Clamp to reasonable rotation angles (~ ±0.3 radians = ±17 degrees)
           const maxAngle = 0.3;
-
-          // gamma ranges approx -90 to 90 degrees, normalize -1..1
           let gamma = event.gamma
             ? THREE.MathUtils.clamp(event.gamma / 45, -1, 1)
             : 0;
-          // beta ranges approx -180 to 180 degrees, normalize -1..1
           let beta = event.beta
             ? THREE.MathUtils.clamp(event.beta / 45, -1, 1)
             : 0;
 
-          // Map to rotation radians
-          deviceRotY = maxAngle * gamma; // left/right rotation (y axis)
-          deviceRotX = maxAngle * beta; // up/down rotation (x axis)
+          deviceRotY = maxAngle * gamma;
+          deviceRotX = maxAngle * beta;
 
           deviceEnabled = true;
         },
@@ -540,30 +522,23 @@
 
     const clock = new THREE.Clock();
 
-    // HSL → HEX helper
-    function hslToHex(h, s, l) {
-      const a = s * Math.min(l, 1 - l);
-      const f = (n) => {
-        const k = (n + h * 12) % 12;
-        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
-        return Math.round(255 * color);
-      };
-      return (f(0) << 16) | (f(8) << 8) | f(4);
-    }
-
     function animate() {
       requestAnimationFrame(animate);
 
       const elapsed = clock.getElapsedTime();
 
+      // Pulsing scale for the whole group
+      const pulseScale = 1 + Math.sin(elapsed * 1.5) * 0.1;
+      group.scale.setScalar(pulseScale);
+
+      // Floating effect
       group.position.y = Math.sin(elapsed * 1.3) * 0.15;
 
+      // Handle rotation with mouse or device
       if (deviceEnabled && isMobile) {
-        // Smoothly interpolate group rotation to device orientation
         group.rotation.x = lerp(group.rotation.x, deviceRotX, 0.1);
         group.rotation.y = lerp(group.rotation.y, deviceRotY, 0.1);
       } else {
-        // Mouse controls for desktop / large screens
         targetRotX = mouseY * 0.3;
         targetRotY = mouseX * 0.3;
 
@@ -571,26 +546,28 @@
         group.rotation.y += 0.05 * (targetRotY - group.rotation.y);
       }
 
+      // Rotate spheres differently for dynamic effect
       sphere1.rotation.x += 0.005;
       sphere1.rotation.y -= 0.007;
-      sphere2.rotation.x -= 0.008;
-      sphere2.rotation.y += 0.01;
+      sphere2.rotation.x -= 0.006;
+      sphere2.rotation.y += 0.009;
       sphere3.rotation.x += 0.004;
-      sphere3.rotation.y -= 0.006;
+      sphere3.rotation.y -= 0.005;
 
-      torus1.rotation.x += 0.005;
-      torus1.rotation.y -= 0.007;
-      torus2.rotation.x -= 0.008;
-      torus2.rotation.y += 0.01;
-      torus3.rotation.x += 0.004;
-      torus3.rotation.y -= 0.006;
+      // Rotate tori smoothly in different axes and directions
+      toriGroup.children.forEach((torus, i) => {
+        const speed = 0.01 + i * 0.003;
+        torus.rotation.x += speed * (i % 2 === 0 ? 1 : -1);
+        torus.rotation.y += speed * (i % 2 === 0 ? -1 : 1);
+      });
 
-      // Animate particle system rotation and scale pulsation
-      particleSystem.rotation.x += 0.005;
-      particleSystem.rotation.y += 0.005;
-      particleSystem.scale.setScalar(1 + Math.sin(elapsed * 3) * 0.2);
+      // Particles orbiting slowly
+      particleSystem.rotation.x += 0.002;
+      particleSystem.rotation.y += 0.003;
+      particleSystem.position.x = Math.sin(elapsed * 0.7) * 0.5;
+      particleSystem.position.z = Math.cos(elapsed * 0.7) * 0.5;
 
-      // Update colors dynamically
+      // Dynamic color cycling
       const hue1 = (elapsed * 0.03) % 1;
       const hue2 = (elapsed * 0.05) % 1;
 
@@ -599,17 +576,17 @@
       const glowCol = new THREE.Color();
       glowCol.setHSL(hue2, 1, 0.5);
 
-      // Update all materials of spheres and tori with new colors
       [sphere1, sphere2, sphere3].forEach((grp) => {
         grp.children[0].material.color.copy(baseCol);
-        grp.children[1].material.color.copy(glowCol);
-      });
-      [torus1, torus2, torus3].forEach((grp) => {
-        grp.children[0].material.color.copy(baseCol);
-        grp.children[1].material.color.copy(glowCol);
+        grp.children[0].material.emissive.copy(glowCol);
+        grp.children[1].material.color.copy(baseCol);
+        grp.children[2].material.color.copy(glowCol);
       });
 
-      // Update particle color
+      toriGroup.children.forEach((torus) => {
+        torus.material.color.copy(glowCol);
+      });
+
       particlesMaterial.color.copy(glowCol);
 
       composer.render();
@@ -629,5 +606,7 @@
     });
   })();
 </script>
+
+
 
 {% endblock %}
