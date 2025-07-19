@@ -71,3 +71,7 @@ def contact():
             print('Error: ', e)
             flash('Error. Please try again later', 'error')
     return render_template('contact.html')
+
+@main.route('/sitemap')
+def sitemap():
+    return render_template('sitemap.xlm')
